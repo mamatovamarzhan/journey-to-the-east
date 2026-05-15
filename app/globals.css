@@ -1,0 +1,317 @@
+/* ──────────────────────────────────────────────────────────────────
+ * Journey to the East — global styles.
+ *
+ * We're on Tailwind v4 which uses CSS-first configuration: the design
+ * tokens (colors, fonts, etc.) live in @theme blocks below, and Tailwind
+ * generates utility classes from them at build time.
+ *
+ * Palette ("modern editorial meets Uzbek tradition"):
+ *   turquoise   #1B5E7E  — Samarkand domes
+ *   terracotta  #C26B4B  — clay walls
+ *   ochre       #D4A24C  — dome gold
+ *   cream       #FBF5EC  — sun-bleached paper (light bg)
+ *   ultramarine #0F1A3A  — night sky (dark bg)
+ *   charcoal    #2A2520  — warm near-black text
+ * ────────────────────────────────────────────────────────────────── */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+/* Leaflet base styles for the /map page. Kept global because tiles, the
+ * zoom control, and popups are not scoped to a React component. */
+@import "leaflet/dist/leaflet.css";
+
+/* Enable class-based dark mode: any element inside `.dark` gets dark styles. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Light-mode tokens (default). ─── */
+:root {
+  /* Brand palette — raw hex values, also exposed as utilities via @theme below. */
+  --uz-turquoise: #1b5e7e;
+  --uz-turquoise-deep: #134a64;
+  --uz-terracotta: #c26b4b;
+  --uz-terracotta-deep: #a85838;
+  --uz-ochre: #d4a24c;
+  --uz-ochre-soft: #e6c081;
+  --uz-cream: #fbf5ec;
+  --uz-cream-deep: #f3e9d4;
+  --uz-ultramarine: #0f1a3a;
+  --uz-ultramarine-soft: #1b2a5a;
+  --uz-charcoal: #2a2520;
+  --uz-charcoal-soft: #4a4138;
+
+  /* Semantic tokens — these are what components reference. */
+  --background: var(--uz-cream);
+  --foreground: var(--uz-charcoal);
+  --muted: #efe4cf;
+  --muted-foreground: #6b5d4c;
+  --card: #ffffff;
+  --card-foreground: var(--uz-charcoal);
+  --popover: #ffffff;
+  --popover-foreground: var(--uz-charcoal);
+  --primary: var(--uz-turquoise);
+  --primary-foreground: var(--uz-cream);
+  --secondary: var(--uz-cream-deep);
+  --secondary-foreground: var(--uz-charcoal);
+  --accent: var(--uz-terracotta);
+  --accent-foreground: var(--uz-cream);
+  --destructive: #b94632;
+  --destructive-foreground: #ffffff;
+  --border: #e6d9bf;
+  --input: #e6d9bf;
+  --ring: var(--uz-turquoise);
+  --radius: 0.75rem;
+}
+
+/* ─── Dark-mode tokens. ─── */
+.dark {
+  --background: var(--uz-ultramarine);
+  --foreground: var(--uz-cream);
+  --muted: #1b2a5a;
+  --muted-foreground: #b8b0a0;
+  --card: #16224a;
+  --card-foreground: var(--uz-cream);
+  --popover: #16224a;
+  --popover-foreground: var(--uz-cream);
+  --primary: #6cb5d4; /* lighter turquoise so it pops on dark */
+  --primary-foreground: var(--uz-ultramarine);
+  --secondary: #1b2a5a;
+  --secondary-foreground: var(--uz-cream);
+  --accent: var(--uz-terracotta);
+  --accent-foreground: var(--uz-cream);
+  --destructive: #e57764;
+  --destructive-foreground: var(--uz-ultramarine);
+  --border: #2a3a6a;
+  --input: #2a3a6a;
+  --ring: #6cb5d4;
+}
+
+/* ─── Tailwind theme: expose tokens as Tailwind utility classes. ─── */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Direct brand-color utilities, e.g. `bg-uz-turquoise`. */
+  --color-uz-turquoise: var(--uz-turquoise);
+  --color-uz-turquoise-deep: var(--uz-turquoise-deep);
+  --color-uz-terracotta: var(--uz-terracotta);
+  --color-uz-terracotta-deep: var(--uz-terracotta-deep);
+  --color-uz-ochre: var(--uz-ochre);
+  --color-uz-ochre-soft: var(--uz-ochre-soft);
+  --color-uz-cream: var(--uz-cream);
+  --color-uz-cream-deep: var(--uz-cream-deep);
+  --color-uz-ultramarine: var(--uz-ultramarine);
+  --color-uz-ultramarine-soft: var(--uz-ultramarine-soft);
+  --color-uz-charcoal: var(--uz-charcoal);
+  --color-uz-charcoal-soft: var(--uz-charcoal-soft);
+
+  /* Font families. The CSS variables are set by next/font in layout.tsx. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, serif;
+  --font-script: var(--font-caveat), ui-sans-serif, cursive;
+
+  /* Radius scale matches shadcn conventions. */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Custom animations. */
+  --animate-fade-in: fade-in 0.6s ease-out both;
+  --animate-fade-up: fade-up 0.8s ease-out both;
+  --animate-shimmer: shimmer 2.2s linear infinite;
+  --animate-ken-burns: ken-burns 18s ease-in-out infinite alternate;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to   { background-position: 200% 0; }
+  }
+  @keyframes ken-burns {
+    from { transform: scale(1) translate(0, 0); }
+    to   { transform: scale(1.12) translate(-1%, -1.5%); }
+  }
+}
+
+/* ─── Base layer. ─── */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    /* Smooth scroll for anchor links in city TOC. */
+    scroll-behavior: smooth;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.65;
+    /* Soft transition between light & dark mode. */
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+  ::selection {
+    background: var(--uz-ochre);
+    color: var(--uz-charcoal);
+  }
+}
+
+/* ─── Reusable helpers. ─── */
+@layer utilities {
+  /* Editorial drop-cap for the first paragraph of city Overview sections. */
+  .drop-cap::first-letter {
+    font-family: var(--font-serif);
+    float: left;
+    font-size: 4.5rem;
+    line-height: 0.9;
+    padding-right: 0.5rem;
+    padding-top: 0.4rem;
+    color: var(--uz-terracotta);
+    font-weight: 500;
+  }
+
+  /* Glass-morphism card (used on map popups and floating hero chips). */
+  .glass {
+    background: color-mix(in srgb, var(--card) 70%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  }
+  .glass-dark {
+    background: color-mix(in srgb, #0f1a3a 55%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--uz-cream);
+  }
+
+  /* Warm-tinted shadow used on hover. */
+  .shadow-warm {
+    box-shadow: 0 20px 50px -20px rgba(194, 107, 75, 0.35),
+                0 8px 20px -10px rgba(212, 162, 76, 0.25);
+  }
+
+  /* The Uzbek geometric divider — a repeating CSS pattern. */
+  .uz-pattern {
+    background-image:
+      radial-gradient(circle at 50% 50%, var(--uz-ochre) 1.5px, transparent 2px),
+      linear-gradient(45deg, transparent 47%, color-mix(in srgb, var(--uz-turquoise) 25%, transparent) 47%, color-mix(in srgb, var(--uz-turquoise) 25%, transparent) 53%, transparent 53%);
+    background-size: 24px 24px, 24px 24px;
+  }
+
+  /* ─── Leaflet marker + popup overrides (only loaded on /map). ─── */
+  .jte-marker {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    background: var(--uz-terracotta);
+    border: 2px solid var(--uz-ochre);
+    box-shadow: 0 4px 10px -2px rgba(194, 107, 75, 0.6);
+    transition: transform 0.15s ease;
+  }
+  .jte-marker:hover { transform: scale(1.25); }
+  .jte-marker-city {
+    background: var(--uz-turquoise);
+    border: 3px solid var(--uz-ochre);
+    box-shadow: 0 6px 16px -4px rgba(27, 94, 126, 0.6);
+  }
+
+  .jte-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 9999px;
+    color: var(--uz-cream);
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-weight: 500;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.35);
+  }
+  .jte-cluster-sm { background: var(--uz-ochre); }
+  .jte-cluster-md { background: var(--uz-terracotta); }
+  .jte-cluster-lg { background: var(--uz-turquoise); width: 52px; height: 52px; font-size: 20px; }
+
+  /* Leaflet's default popup chrome → glass cream with gold border. */
+  .leaflet-popup-content-wrapper {
+    background: color-mix(in srgb, var(--uz-cream) 92%, transparent);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid color-mix(in srgb, var(--uz-ochre) 60%, transparent);
+    border-radius: 14px;
+    box-shadow: 0 20px 50px -20px rgba(15, 26, 58, 0.45);
+    color: var(--uz-charcoal);
+  }
+  .leaflet-popup-tip {
+    background: color-mix(in srgb, var(--uz-cream) 92%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--uz-ochre) 60%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--uz-ochre) 60%, transparent);
+  }
+  .leaflet-popup-content { margin: 14px 14px 10px; line-height: 1.45; }
+  .leaflet-popup-close-button {
+    color: var(--uz-charcoal) !important;
+    padding: 8px 8px 0 0 !important;
+    opacity: 0.6;
+  }
+  .leaflet-popup-close-button:hover { opacity: 1; }
+
+  /* Zoom control: round, palette colors. */
+  .leaflet-bar a, .leaflet-bar a:hover {
+    background: var(--card);
+    color: var(--foreground);
+    border-color: var(--border);
+  }
+  .leaflet-bar a:first-child { border-top-left-radius: 8px; border-top-right-radius: 8px; }
+  .leaflet-bar a:last-child  { border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+
+  /* Attribution: tone it down. */
+  .leaflet-control-attribution {
+    background: color-mix(in srgb, var(--card) 80%, transparent) !important;
+    color: var(--muted-foreground) !important;
+    font-size: 10px !important;
+  }
+  .leaflet-control-attribution a { color: var(--uz-terracotta) !important; }
+
+  /* Container with generous padding used throughout. */
+  .container-editorial {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .container-editorial { padding-inline: 2.5rem; }
+  }
+}
