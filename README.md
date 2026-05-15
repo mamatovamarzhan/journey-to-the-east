@@ -218,6 +218,10 @@ git status
 git log --oneline -n 20
 ```
 
+## Author
+
+Built by **Marzhan Mamatova** — [nFactorial Incubator, Almaty](https://nfactorial.school).
+
 ## License
 
 MIT. Travel safely.
